@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Org.Ktu.Isk.P175B602.Autonuoma.Models.SutartisF2.SutartisL>
+
+@{
+    ViewData["title"] = "DVD Nuomos Sutartys (F2)";
+}
+
+<div class="main-content-header">
+    <span class="title">@ViewData["title"]</span>
+    <span class="actions">
+        <a href="@Url.Action("Create")" class="btn btn-primary">
+            <i class="fa-solid fa-plus"></i> Sukurti naują sutartį
+        </a>
+    </span>
+</div>
+
+<div class="main-content-lst">
+    <table class="entity-list">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(m => m.Nr)</th>
+                <th>@Html.DisplayNameFor(m => m.Data)</th>
+                <th>Kaina</th>
+                <th>Būsena</th>
+                <th>Pristatymas</th>
+                <th>Veiksmai</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+            <tr>
+                <td>@Html.DisplayFor(m => item.Nr)</td>
+                <td>@item.Data.ToString("yyyy-MM-dd")</td>
+                <td>@item.Kaina.ToString("0.00") €</td>
+                <td>
+                    @switch(item.Busena)
+                    {
+                        case "-pristatyta":
+                            <span class="badge bg-success">Pristatyta</span>
+                            break;
+                        case "-nepristatyta":
+                            <span class="badge bg-warning text-dark">Nepristatyta</span>
+                            break;
+                        case "-apmokėta":
+                            <span class="badge bg-primary">Apmokėta</span>
+                            break;
+                        case "-neapmokėta":
+                            <span class="badge bg-danger">Neapmokėta</span>
+                            break;
+                        case "-išsiųsta":
+                            <span class="badge bg-info text-dark">Išsiųsta</span>
+                            break;
+                        default:
+                            <span class="badge bg-secondary">@item.Busena</span>
+                            break;
+                    }
+                </td>
+                <td>
+                    @if(item.PristatymoKaina > 0)
+                    {
+                        <span>@item.PristatymoKaina.ToString("0.00") €</span>
+                    }
+                    else
+                    {
+                        <span>Paėmimas vietoje</span>
+                    }
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a href="@Url.Action("Edit", new { id = item.Nr })" 
+                           class="btn btn-primary btn-sm"
+                           title="Redaguoti">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                        <a href="@Url.Action("Delete", new { id = item.Nr })" 
+                           class="btn btn-danger btn-sm"
+                           title="Šalinti">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

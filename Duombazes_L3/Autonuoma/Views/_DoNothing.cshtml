@@ -1,0 +1,34 @@
+@* this will also be used as page title in main layout *@
+@{ ViewData["title"] = "Page to use instead of redirect view if you want to see queries."; }
+
+@* content header *@
+<div class="main-content-header">
+	<span class="title">@ViewData["title"]</span>
+    <span class="actions">
+		<a 
+			href="@Url.Action("Index")" 
+			class="btn btn-outline-primary btn-sm"
+		>
+			<i class="fa-solid fa-angles-left"></i> Atgal į sarašą
+		</a>
+	</span>
+</div>
+
+@* content itself *@
+<div class="p-3">
+    <p>This view exists, so that you can see queries executed in actions that use <i>return RedirectToAction("Index");</i>.</p>
+    <p>Use <i>return View("_DoNothing");</i> instead, to render this view instead of redirection.</p>
+</div>
+
+@* content footer *@
+<div class="main-content-footer">
+	<span class="title"></span>
+	<span class="actions">
+		<a 
+			href="@Url.Action("Index")" 
+			class="btn btn-outline-primary btn-sm"
+		>
+			<i class="fa-solid fa-angles-left"></i> Atgal į sarašą
+		</a>
+	</span>
+</div>

@@ -1,0 +1,126 @@
+﻿@model Org.Ktu.Isk.P175B602.Autonuoma.Models.SutartisF2.SutartisCE
+
+@{
+    ViewData["title"] = "Sutarties sukūrimas (F2)";
+}
+
+<div class="main-content-header">
+    <span class="title">@ViewData["title"]</span>
+    <span class="actions">
+        <a href="@Url.Action("Index")" class="btn btn-outline-primary btn-sm">
+            <i class="fa-solid fa-angles-left"></i> Atgal į sarašą
+        </a>
+    </span>
+</div>
+
+<div class="main-content-ced">
+@using(Html.BeginForm(FormMethod.Post, new { @class="entity-ce" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(m => m.Sutartis.Nr)
+
+    <fieldset>
+        <legend class="text-center">Sutartis</legend>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Sutartis.SutartiesData)
+            @Html.TextBoxFor(m => m.Sutartis.SutartiesData, "{0:yyyy-MM-dd}", new { @class = "date-picker" })
+            @Html.ValidationMessageFor(m => m.Sutartis.SutartiesData, "")
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Sutartis.Kaina)
+            @Html.EditorFor(m => m.Sutartis.Kaina)
+            @Html.ValidationMessageFor(m => m.Sutartis.Kaina, "")
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Sutartis.GrazinimoAdresas)
+            @Html.EditorFor(m => m.Sutartis.GrazinimoAdresas)
+            @Html.ValidationMessageFor(m => m.Sutartis.GrazinimoAdresas, "")
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Sutartis.PristatymoAdresas)
+            @Html.EditorFor(m => m.Sutartis.PristatymoAdresas)
+            @Html.ValidationMessageFor(m => m.Sutartis.PristatymoAdresas, "")
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Sutartis.UzsakymoBusena)
+            @Html.DropDownListFor(m => m.Sutartis.UzsakymoBusena, Model.Lists.Busenos, (string)ViewData["none-chosen"])
+            @Html.ValidationMessageFor(m => m.Sutartis.UzsakymoBusena, "")
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Sutartis.PristatymoKaina)
+            @Html.EditorFor(m => m.Sutartis.PristatymoKaina)
+            @Html.ValidationMessageFor(m => m.Sutartis.PristatymoKaina, "")
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <div class="container-fluid d-flex d-row justify-content-between align-items-center">
+            <span></span>
+            <legend style="width: unset; margin-bottom: 0px;">Užsakytos DVD prekės</legend>
+            <button
+                name="add"
+                value="1"
+                formnovalidate
+                formaction="@Url.Action()#listEnd"
+                class="btn btn-info"
+            ><i class="fa-solid fa-plus"></i> Pridėti</button>
+        </div>
+
+<table>
+    <thead>
+		<tr>
+			<th>Būklė</th>
+			<th>DVD standartas</th>
+		</tr>
+	</thead>
+
+    <tbody>
+    @for (var i = 0; i < Model.UzsakytosPaslaugos.Count; i++)
+    {
+        <tr>
+            <td class="form-group">
+                @Html.DropDownListFor(
+                    m => m.UzsakytosPaslaugos[i].FilmoBukle,
+                    Model.Lists.FilmoBukle,
+                    (string)ViewData["none-chosen"],
+                    new { @class = "form-control" }
+                )
+            </td>
+            <td class="form-group">
+                @Html.DropDownListFor(
+                    m => m.UzsakytosPaslaugos[i].DVD_standartas,
+                    Model.Lists.DVD_Tipas,
+                    (string)ViewData["none-chosen"],
+                    new { @class = "form-control" }
+                )
+            </td>
+        </tr>
+    }
+</tbody>
+
+</table>
+
+        <span id="listEnd"></span>
+    </fieldset>
+
+    <div class="container-fluid d-flex d-row justify-content-end">
+        <button name="save" value="1" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i> Išsaugoti</button>
+    </div>
+}
+</div>
+
+<div class="main-content-footer">
+    <span class="title"></span>
+    <span class="actions">
+        <a href="@Url.Action("Index")" class="btn btn-outline-primary btn-sm">
+            <i class="fa-solid fa-angles-left"></i> Atgal į sarašą
+        </a>
+    </span>
+</div>

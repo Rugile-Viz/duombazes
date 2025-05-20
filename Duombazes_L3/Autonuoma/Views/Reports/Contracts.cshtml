@@ -1,0 +1,137 @@
+﻿@model Org.Ktu.Isk.P175B602.Autonuoma.Models.ContractsReport.Report
+
+@* this will also be used as page title in main layout *@
+@{ ViewData["title"] = "Užsakymų ataskaita"; }
+
+@* content header *@
+<div class="main-content-header">
+    <span class="title">@ViewData["title"]</span>
+</div>
+
+@* content itself *@
+<div class="main-content-rep">
+@using( Html.BeginForm(FormMethod.Get, new { @class="rep" }) )
+{
+    <p><strong>Parengta:</strong> @String.Format("{0:yyyy-MM-dd HH:mm}", DateTime.Now)</p>
+
+    @* filter section *@
+    <div class="filter">
+        <div class="fields">
+            <div class="field">
+                <label>Užsakymai nuo:</label>
+                @Html.TextBoxFor(m => m.DateFrom, "{0:yyyy-MM-dd}", new { @class = "date-picker" })
+            </div>
+
+            <div class="field">
+                <label>Užsakymai iki:</label>
+                @Html.TextBoxFor(m => m.DateTo, "{0:yyyy-MM-dd}", new { @class = "date-picker" })
+            </div>
+
+            <div class="field">
+                <label>Vardas:</label>
+                @Html.TextBox("searchVardas", ViewBag.SearchVardas as string, new { @class = "form-control" })
+            </div>
+
+            <div class="field">
+                <label>Pavardė:</label>
+                @Html.TextBox("searchPavarde", ViewBag.SearchPavarde as string, new { @class = "form-control" })
+            </div>
+
+            <div class="field">
+                <label>Rikiavimas:</label>
+                @Html.DropDownList("sortOrder", new SelectList(new Dictionary<string, string>
+                {
+                    {"date_asc", "Nuo seniausio"},
+                    {"date_desc", "Nuo naujausio"},
+                    {"price_asc", "Kaina nuo mažiausios"},
+                    {"price_desc", "Kaina nuo didžiausios"}
+                }, "Key", "Value", ViewBag.SortOrder), new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button class="btn btn-success"><i class="fa-solid fa-filter"></i> Atrinkti</button>
+        </div>
+    </div>
+
+   @* report data *@
+<table class="report">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(m => m.Sutartys[0].Nr)</th>
+            <th>@Html.DisplayNameFor(m => m.Sutartys[0].SutartiesData)</th>
+            <th>@Html.DisplayNameFor(m => m.Sutartys[0].Vardas)</th>
+            <th>@Html.DisplayNameFor(m => m.Sutartys[0].Pavarde)</th>
+            <th>@Html.DisplayNameFor(m => m.Sutartys[0].Kaina)</th>
+            <th>@Html.DisplayNameFor(m => m.Sutartys[0].SutarciuKiekis)</th>
+           
+        </tr>
+    </thead>
+    <tbody>
+        @if( Model.Sutartys.Count == 0 )
+        {
+            @* no data message *@
+            <tr class="no-data-msg">
+                <td colspan="7" align="center">Nurodytame laikotarpyje nebuvo užsakymų</td>
+            </tr>
+        }
+        else 
+        {
+            @* groups *@
+            @for( int i = 0; i < Model.Sutartys.Count; i++ )
+            {
+                @* group header *@
+                if( i == 0 || Model.Sutartys[i].AsmensKodas != Model.Sutartys[i-1].AsmensKodas )
+                {
+                    <tr class="group-header">
+                        <td colspan="7" align="center">
+                            <b>@Html.DisplayFor(m => Model.Sutartys[i].Vardas) @Html.DisplayFor(m => Model.Sutartys[i].Pavarde)</b>
+                        </td>
+                    </tr>
+                }
+
+                @* group content *@
+                <tr>
+                    <td>#@Html.DisplayFor(m => Model.Sutartys[i].Nr)</td>
+                    <td>@Html.DisplayFor(m => Model.Sutartys[i].SutartiesData)</td>
+                    <td>@Html.DisplayFor(m => Model.Sutartys[i].Vardas)</td>
+                    <td>@Html.DisplayFor(m => Model.Sutartys[i].Pavarde)</td>
+                    <td>@Html.DisplayFor(m => Model.Sutartys[i].Kaina)</td>
+                    <td>1</td>
+                    <td>@Html.DisplayFor(m => Model.Sutartys[i].Kaina)</td>
+                </tr>
+
+                @* group total *@
+                if( i == Model.Sutartys.Count-1 || Model.Sutartys[i].AsmensKodas != Model.Sutartys[i + 1].AsmensKodas )
+                {
+                    var groupCount = 0;
+                    var groupSum = 0m;
+                    for (int j = i; j >= 0 && Model.Sutartys[j].AsmensKodas == Model.Sutartys[i].AsmensKodas; j--)
+                    {
+                        groupCount++;
+                        groupSum += Model.Sutartys[j].Kaina;
+                    }
+                    
+                    <tr>
+                        <td colspan="5"></td>
+                        <td><b>@groupCount</b></td>
+                        <td><b>@groupSum.ToString("0.00")</b></td>
+                    </tr>
+                }
+            }
+
+            @* grand total *@
+            <tr class="grand-total-header">
+                <td colspan="7" align="center"><b>Viso</b></td>
+            </tr>
+
+            <tr>
+                <td colspan="5"></td>
+                <td><b>@Model.Sutartys.Count</b></td>
+                <td><b>@Model.Sutartys.Sum(m => m.Kaina).ToString("0.00")</b></td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+</div>

@@ -1,0 +1,3 @@
+Failas autonuoma.sln yra reikalingas ir turi būti toje vietoje kur ir archyve. 
+
+VSCode turite atsidaryti tą katalogą, kuriame yra autonuoma.sln, ne Autonuoma katalogą šalią jo.

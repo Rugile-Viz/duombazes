@@ -1,0 +1,17 @@
+//pull in fontawesome stuff
+@use "~@fortawesome/fontawesome-free/scss/fontawesome" with (
+    $fa-font-path: "~@fortawesome/fontawesome-free/webfonts"
+);
+@use "~@fortawesome/fontawesome-free/scss/solid"  with (
+    $fa-font-path: "~@fortawesome/fontawesome-free/webfonts"
+);
+@use "~@fortawesome/fontawesome-free/scss/regular"  with (
+    $fa-font-path: "~@fortawesome/fontawesome-free/webfonts"
+);
+
+//pull in bootstrap
+@use "~bootstrap/scss/bootstrap";
+
+//pull in styles from jQuery plugins
+@use "~jquery-datetimepicker/jquery.datetimepicker";
+@use "~datatables.net-dt/css/dataTables.dataTables";
